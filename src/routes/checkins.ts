@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/requireAuth";
-import { requireRole } from "../middleware/requireRole";
-import { requireEventAccess } from "../middleware/requireEventAccess";
-import { requireEventStaffOrOwner } from "../middleware/requireEventStaffOrOwner";
-import { create, listByEvent } from "../controllers/checkins.controller";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { requireRole } from "../middleware/requireRole.js";
+import { requireEventAccess } from "../middleware/requireEventAccess.js";
+import { requireEventStaffOrOwner } from "../middleware/requireEventStaffOrOwner.js";
+import { create, listByEvent } from "../controllers/checkins.controller.js";
 
 const router = Router();
 

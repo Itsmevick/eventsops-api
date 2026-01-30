@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { requireAuth } from "../middleware/requireAuth";
-import { requireRole } from "../middleware/requireRole";
-import { requireEventAccess } from "../middleware/requireEventAccess";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { requireRole } from "../middleware/requireRole.js";
+import { requireEventAccess } from "../middleware/requireEventAccess.js";
 import {
   create,
   list,
@@ -10,10 +10,10 @@ import {
   publish,
   archive,
   metrics,
-} from "../controllers/events.controller";
-import { create as createAssignment, listByEvent } from "../controllers/assignments.controller";
-import { create as createCheckIn, listByEvent as listCheckInsByEvent } from "../controllers/checkins.controller";
-import { requireEventStaffOrOwner } from "../middleware/requireEventStaffOrOwner";
+} from "../controllers/events.controller.js";
+import { create as createAssignment, listByEvent } from "../controllers/assignments.controller.js";
+import { create as createCheckIn, listByEvent as listCheckInsByEvent } from "../controllers/checkins.controller.js";
+import { requireEventStaffOrOwner } from "../middleware/requireEventStaffOrOwner.js";
 
 const router = Router();
 

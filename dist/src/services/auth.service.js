@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 function toPublicUser(user) {
     return { id: user.id, name: user.name, email: user.email, role: user.role };
 }

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import authRouter from "./auth";
-import eventsRouter from "./events";
-import assignmentsRouter from "./assignments";
-import checkinsRouter from "./checkins";
+import authRouter from "./auth.js";
+import eventsRouter from "./events.js";
+import assignmentsRouter from "./assignments.js";
+import checkinsRouter from "./checkins.js";
 const router = Router();
 router.use("/auth", authRouter);
 router.use("/events", eventsRouter);

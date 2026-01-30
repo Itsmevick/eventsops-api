@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { prisma } from "../lib/prisma";
-import type { Role } from "../types/prisma-enums";
+import { prisma } from "../lib/prisma.js";
+import type { Role } from "../types/prisma-enums.js";
 
 export async function requireEventAccess(
   req: Request,

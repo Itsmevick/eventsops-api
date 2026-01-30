@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 export async function createAssignment(input) {
     console.info("[ASSIGNMENTS] Creating assignment", {
         eventId: input.eventId,

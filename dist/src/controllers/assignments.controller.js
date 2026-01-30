@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createAssignment, listAssignmentsByEvent, deleteAssignment, } from "../services/assignments.service";
+import { createAssignment, listAssignmentsByEvent, deleteAssignment, } from "../services/assignments.service.js";
 const createAssignmentSchema = z.object({
     userId: z.string().min(1),
     roleName: z.string().min(2),

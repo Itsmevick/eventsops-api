@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import { prisma } from "./lib/prisma";
-import router from "./routes";
-import { requestLogger } from "./middleware/requestLogger";
+import { prisma } from "./lib/prisma.js";
+import router from "./routes/index.js";
+import { requestLogger } from "./middleware/requestLogger.js";
 
 dotenv.config();
 

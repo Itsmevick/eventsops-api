@@ -8,8 +8,8 @@ import {
   publishEvent,
   archiveEvent,
   getEventMetrics,
-} from "../services/events.service";
-import type { EventStatus } from "../types/prisma-enums";
+} from "../services/events.service.js";
+import type { EventStatus } from "../types/prisma-enums.js";
 
 const createEventSchema = z
   .object({

@@ -4,7 +4,7 @@ import {
   createAssignment,
   listAssignmentsByEvent,
   deleteAssignment,
-} from "../services/assignments.service";
+} from "../services/assignments.service.js";
 
 const createAssignmentSchema = z.object({
   userId: z.string().min(1),

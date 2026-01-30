@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { registerUser, loginUser, getMe } from "../services/auth.service";
-import { signAccessToken } from "../utils/jwt";
+import { registerUser, loginUser, getMe } from "../services/auth.service.js";
+import { signAccessToken } from "../utils/jwt.js";
 const registerSchema = z.object({
     name: z.string().min(1),
     email: z.string().email(),

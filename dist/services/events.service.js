@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 export async function createEvent(input) {
     console.info("[EVENTS] Creating event", { title: input.title, organizerId: input.organizerId });
     const event = await prisma.event.create({

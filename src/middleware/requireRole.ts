@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import type { Role } from "../types/prisma-enums";
+import type { Role } from "../types/prisma-enums.js";
 
 export function requireRole(...allowedRoles: Role[]) {
   return (req: Request, res: Response, next: NextFunction) => {

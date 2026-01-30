@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 export async function createCheckIn(input) {
     console.info("[CHECKINS] Creating check-in", {
         eventId: input.eventId,

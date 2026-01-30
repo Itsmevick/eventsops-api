@@ -1,4 +1,4 @@
-import type { Role, EventStatus } from "../types/prisma-enums";
+import type { Role, EventStatus } from "../types/prisma-enums.js";
 export type CreateEventInput = {
     title: string;
     description?: string | null;

@@ -1,4 +1,4 @@
-import type { Role } from "../types/prisma-enums";
+import type { Role } from "../types/prisma-enums.js";
 export type PublicUser = {
     id: string;
     name: string;

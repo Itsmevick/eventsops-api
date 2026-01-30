@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createEvent, listEvents, getEventById, updateEvent, publishEvent, archiveEvent, getEventMetrics, } from "../services/events.service";
+import { createEvent, listEvents, getEventById, updateEvent, publishEvent, archiveEvent, getEventMetrics, } from "../services/events.service.js";
 const createEventSchema = z
     .object({
     title: z.string().min(3),

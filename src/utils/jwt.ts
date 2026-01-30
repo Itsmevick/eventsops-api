@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import type { Role } from "../types/prisma-enums";
+import type { Role } from "../types/prisma-enums.js";
 
 type AccessTokenPayload = {
   sub: string;

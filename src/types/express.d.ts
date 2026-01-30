@@ -1,4 +1,4 @@
-import type { Role, EventStatus } from "./prisma-enums";
+import type { Role, EventStatus } from "./prisma-enums.js";
 
 declare global {
   namespace Express {

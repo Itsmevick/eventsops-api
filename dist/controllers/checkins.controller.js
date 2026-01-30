@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createCheckIn, listCheckInsByEvent } from "../services/checkins.service";
+import { createCheckIn, listCheckInsByEvent } from "../services/checkins.service.js";
 const createCheckInSchema = z.object({
     attendeeName: z.string().min(2),
     attendeeEmail: z.string().email().optional().nullable(),

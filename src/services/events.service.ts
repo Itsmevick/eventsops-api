@@ -1,5 +1,5 @@
-import { prisma } from "../lib/prisma";
-import type { Role, EventStatus } from "../types/prisma-enums";
+import { prisma } from "../lib/prisma.js";
+import type { Role, EventStatus } from "../types/prisma-enums.js";
 
 export type CreateEventInput = {
   title: string;
