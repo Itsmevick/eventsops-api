@@ -1,0 +1,426 @@
+{
+    "info": {
+      "_postman_id": "a3a6f9f0-6c3b-4d2d-8b31-0edc0b7b7c11",
+      "name": "EventOps API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Health - /health",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/health",
+            "host": ["{{baseUrl}}"],
+            "path": ["health"]
+          }
+        }
+      },
+      {
+        "name": "Health - /db-health",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{baseUrl}}/db-health",
+            "host": ["{{baseUrl}}"],
+            "path": ["db-health"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Login (Admin, seeded)",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200', function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "",
+                "const json = pm.response.json();",
+                "if (json && json.accessToken) {",
+                "  pm.collectionVariables.set('accessToken', json.accessToken);",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/login",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "login"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Me (Bearer {{accessToken}})",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/me",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "me"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Logout",
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/logout",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "logout"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Login (Organizer, seeded)",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200', function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "",
+                "const json = pm.response.json();",
+                "if (json && json.accessToken) {",
+                "  pm.collectionVariables.set('accessToken', json.accessToken);",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"{{organizerEmail}}\",\n  \"password\": \"{{organizerPassword}}\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/login",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "login"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Register Staff (creates staffUserId)",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200/201', function () {",
+                "  pm.expect([200, 201, 409]).to.include(pm.response.code);",
+                "});",
+                "",
+                "// If already exists (409), you can still login with the same creds.",
+                "if (pm.response.code !== 409) {",
+                "  const json = pm.response.json();",
+                "  if (json && json.id) {",
+                "    pm.collectionVariables.set('staffUserId', json.id);",
+                "  }",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"name\": \"{{staffName}}\",\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{staffPassword}}\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/register",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "register"]
+          }
+        }
+      },
+      {
+        "name": "Auth - Login (Staff, uses staff creds)",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200', function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "",
+                "const json = pm.response.json();",
+                "if (json && json.accessToken) {",
+                "  pm.collectionVariables.set('staffAccessToken', json.accessToken);",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [{ "key": "Content-Type", "value": "application/json" }],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"email\": \"{{staffEmail}}\",\n  \"password\": \"{{staffPassword}}\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/auth/login",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "auth", "login"]
+          }
+        }
+      },
+      {
+        "name": "Events - Create (Organizer) -> saves eventId",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200/201', function () {",
+                "  pm.expect([200, 201]).to.include(pm.response.code);",
+                "});",
+                "",
+                "const json = pm.response.json();",
+                "const id = (json && (json.id || (json.data && json.data.id))) || null;",
+                "if (id) pm.collectionVariables.set('eventId', id);"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"title\": \"Postman Created Event\",\n  \"description\": \"Event created via Postman collection\",\n  \"venue\": \"Nairobi\",\n  \"startAt\": \"2030-01-01T10:00:00.000Z\",\n  \"endAt\": \"2030-01-01T14:00:00.000Z\",\n  \"capacity\": 100\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/events",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events"]
+          }
+        }
+      },
+      {
+        "name": "Events - List (current user scope)",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events"]
+          }
+        }
+      },
+      {
+        "name": "Events - Get by ID",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}"]
+          }
+        }
+      },
+      {
+        "name": "Events - Update",
+        "request": {
+          "method": "PATCH",
+          "header": [
+            { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"venue\": \"Westlands\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}"]
+          }
+        }
+      },
+      {
+        "name": "Events - Publish",
+        "request": {
+          "method": "PATCH",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/publish",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "publish"]
+          }
+        }
+      },
+      {
+        "name": "Assignments - Create (Organizer assigns staff) -> saves assignmentId",
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test('Status is 200/201', function () {",
+                "  pm.expect([200, 201, 409]).to.include(pm.response.code);",
+                "});",
+                "",
+                "// If duplicate (409), you may still continue; assignmentId won't be updated.",
+                "if (pm.response.code !== 409) {",
+                "  const json = pm.response.json();",
+                "  const id = (json && (json.id || (json.data && json.data.id))) || null;",
+                "  if (id) pm.collectionVariables.set('assignmentId', id);",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"userId\": \"{{staffUserId}}\",\n  \"roleName\": \"Usher\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/assignments",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "assignments"]
+          }
+        }
+      },
+      {
+        "name": "Assignments - List for Event",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/assignments",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "assignments"]
+          }
+        }
+      },
+      {
+        "name": "Check-ins - Create (Staff)",
+        "request": {
+          "method": "POST",
+          "header": [
+            { "key": "Authorization", "value": "Bearer {{staffAccessToken}}" },
+            { "key": "Content-Type", "value": "application/json" }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"attendeeName\": \"John Doe\",\n  \"attendeeEmail\": \"john@example.com\"\n}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/checkins",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "checkins"]
+          }
+        }
+      },
+      {
+        "name": "Check-ins - List (Organizer)",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/checkins",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "checkins"]
+          }
+        }
+      },
+      {
+        "name": "Metrics - Event Metrics (Organizer)",
+        "request": {
+          "method": "GET",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/metrics",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "metrics"]
+          }
+        }
+      },
+      {
+        "name": "Events - Archive",
+        "request": {
+          "method": "PATCH",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/events/{{eventId}}/archive",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "events", "{{eventId}}", "archive"]
+          }
+        }
+      },
+      {
+        "name": "Assignments - Delete (Organizer)",
+        "request": {
+          "method": "DELETE",
+          "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+          "url": {
+            "raw": "{{baseUrl}}/api/assignments/{{assignmentId}}",
+            "host": ["{{baseUrl}}"],
+            "path": ["api", "assignments", "{{assignmentId}}"]
+          }
+        }
+      }
+    ],
+    "variable": [
+      { "key": "baseUrl", "value": "http://localhost:5000" },
+  
+      { "key": "accessToken", "value": "" },
+      { "key": "staffAccessToken", "value": "" },
+  
+      { "key": "eventId", "value": "" },
+      { "key": "assignmentId", "value": "" },
+      { "key": "staffUserId", "value": "" },
+  
+      { "key": "adminEmail", "value": "admin@eventops.dev" },
+      { "key": "adminPassword", "value": "Admin12345!" },
+  
+      { "key": "organizerEmail", "value": "organizer@eventops.dev" },
+      { "key": "organizerPassword", "value": "Organizer123!" },
+  
+      { "key": "staffName", "value": "Staff One" },
+      { "key": "staffEmail", "value": "staff1@eventops.dev" },
+      { "key": "staffPassword", "value": "Staff12345!" }
+    ]
+  }
+  

@@ -1,0 +1,6 @@
+import app from "./app";
+const port = Number(process.env.PORT) || 5000;
+app.listen(port, () => {
+    console.log(`EventOps API running on :${port}`);
+});
+//# sourceMappingURL=server.js.map
