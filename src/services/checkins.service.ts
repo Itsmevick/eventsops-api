@@ -22,7 +22,7 @@ export async function createCheckIn(input: CreateCheckInInput) {
       checkedInByUserId: input.checkedInByUserId,
     },
     include: {
-      checkedInByUser: {
+      checkedInBy: {
         select: {
           id: true,
           name: true,
@@ -48,7 +48,7 @@ export async function listCheckInsByEvent(eventId: string) {
   const checkIns = await prisma.checkIn.findMany({
     where: { eventId },
     include: {
-      checkedInByUser: {
+      checkedInBy: {
         select: {
           id: true,
           name: true,
