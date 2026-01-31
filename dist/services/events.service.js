@@ -201,14 +201,64 @@ export async function archiveEvent(eventId) {
     console.info("[EVENTS] Event archived", { id: event.id });
     return event;
 }
+export async function getEventStats(userId, userRole) {
+    console.info("[EVENTS] Getting stats", { userId, userRole });
+    let where = {};
+    // Role-based filtering
+    if (userRole === "ADMIN") {
+        // ADMIN: all events
+    }
+    else if (userRole === "ORGANIZER") {
+        // ORGANIZER: only their events
+        where.organizerId = userId;
+    }
+    else if (userRole === "STAFF") {
+        // STAFF: only events they're assigned to
+        where.assignments = {
+            some: {
+                userId: userId,
+            },
+        };
+    }
+    // Get total count
+    const total = await prisma.event.count({ where });
+    // Get published count
+    const published = await prisma.event.count({
+        where: {
+            ...where,
+            status: "PUBLISHED",
+        },
+    });
+    // Get upcoming count (events with startAt in the future)
+    const now = new Date();
+    const upcoming = await prisma.event.count({
+        where: {
+            ...where,
+            startAt: {
+                gt: now,
+            },
+        },
+    });
+    console.info("[EVENTS] Stats calculated", {
+        userId,
+        userRole,
+        total,
+        published,
+        upcoming,
+    });
+    return {
+        total,
+        published,
+        upcoming,
+    };
+}
 export async function getEventMetrics(eventId) {
     console.info("[EVENTS] Getting metrics", { eventId });
-    // Get event with capacity
+    // Verify event exists
     const event = await prisma.event.findUnique({
         where: { id: eventId },
         select: {
             id: true,
-            capacity: true,
         },
     });
     if (!event) {
@@ -216,22 +266,52 @@ export async function getEventMetrics(eventId) {
         e.statusCode = 404;
         throw e;
     }
-    // Count check-ins using aggregate
-    const checkInsCount = await prisma.checkIn.count({
+    // Count total assignments
+    const totalAssignments = await prisma.assignment.count({
         where: { eventId },
     });
-    const attendanceRate = event.capacity > 0 ? (checkInsCount / event.capacity) * 100 : null;
+    // Count total check-ins
+    const totalCheckIns = await prisma.checkIn.count({
+        where: { eventId },
+    });
+    // Get assignments grouped by role
+    const assignments = await prisma.assignment.findMany({
+        where: { eventId },
+        select: {
+            roleName: true,
+        },
+    });
+    const assignmentsByRole = {};
+    assignments.forEach((assignment) => {
+        assignmentsByRole[assignment.roleName] =
+            (assignmentsByRole[assignment.roleName] || 0) + 1;
+    });
+    // Count check-ins today
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const checkInsToday = await prisma.checkIn.count({
+        where: {
+            eventId,
+            checkedInAt: {
+                gte: today,
+                lt: tomorrow,
+            },
+        },
+    });
     console.info("[EVENTS] Metrics calculated", {
         eventId,
-        capacity: event.capacity,
-        totalCheckIns: checkInsCount,
-        attendanceRate,
+        totalAssignments,
+        totalCheckIns,
+        checkInsToday,
+        rolesCount: Object.keys(assignmentsByRole).length,
     });
     return {
-        eventId: event.id,
-        capacity: event.capacity,
-        totalCheckIns: checkInsCount,
-        attendanceRate: attendanceRate !== null ? Math.round(attendanceRate * 100) / 100 : null, // Round to 2 decimal places
+        totalAssignments,
+        totalCheckIns,
+        assignmentsByRole,
+        checkInsToday,
     };
 }
 //# sourceMappingURL=events.service.js.map

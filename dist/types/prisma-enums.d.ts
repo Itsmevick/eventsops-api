@@ -1,2 +1,2 @@
-export type { Role, EventStatus } from "../../generated/prisma/enums";
+export type { Role, EventStatus } from "@prisma/client";
 //# sourceMappingURL=prisma-enums.d.ts.map

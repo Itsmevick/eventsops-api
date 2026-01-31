@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createEvent, listEvents, getEventById, updateEvent, publishEvent, archiveEvent, getEventMetrics, } from "../services/events.service.js";
+import { createEvent, listEvents, getEventById, updateEvent, publishEvent, archiveEvent, getEventStats, getEventMetrics, } from "../services/events.service.js";
 const createEventSchema = z
     .object({
     title: z.string().min(3),
@@ -67,6 +67,19 @@ export async function list(req, res) {
     }
     catch (err) {
         console.error("[EVENTS] List error", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+export async function stats(req, res) {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+        const stats = await getEventStats(req.user.id, req.user.role);
+        return res.json({ data: stats });
+    }
+    catch (err) {
+        console.error("[EVENTS] Stats error", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 }

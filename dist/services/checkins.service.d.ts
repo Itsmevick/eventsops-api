@@ -9,7 +9,7 @@ export declare function createCheckIn(input: CreateCheckInInput): Promise<{
         id: string;
         title: string;
     };
-    checkedInByUser: {
+    checkedInBy: {
         id: string;
         name: string;
         email: string;
@@ -23,7 +23,7 @@ export declare function createCheckIn(input: CreateCheckInInput): Promise<{
     checkedInByUserId: string;
 }>;
 export declare function listCheckInsByEvent(eventId: string): Promise<({
-    checkedInByUser: {
+    checkedInBy: {
         id: string;
         name: string;
         email: string;

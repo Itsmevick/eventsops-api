@@ -2,7 +2,7 @@ import { Router } from "express";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireRole } from "../middleware/requireRole.js";
 import { requireEventAccess } from "../middleware/requireEventAccess.js";
-import { create, list, getById, update, publish, archive, metrics, } from "../controllers/events.controller.js";
+import { create, list, stats, getById, update, publish, archive, metrics, } from "../controllers/events.controller.js";
 import { create as createAssignment, listByEvent } from "../controllers/assignments.controller.js";
 import { create as createCheckIn, listByEvent as listCheckInsByEvent } from "../controllers/checkins.controller.js";
 import { requireEventStaffOrOwner } from "../middleware/requireEventStaffOrOwner.js";
@@ -11,6 +11,8 @@ const router = Router();
 router.post("/", requireAuth, requireRole("ADMIN", "ORGANIZER"), create);
 // GET /api/events - List events (role-based filtering)
 router.get("/", requireAuth, list);
+// GET /api/events/stats - Get event statistics (MUST be before /:id route)
+router.get("/stats", requireAuth, stats);
 // POST /api/events/:id/assignments - Create assignment (ADMIN/ORGANIZER + event owner)
 router.post("/:id/assignments", requireAuth, requireRole("ADMIN", "ORGANIZER"), requireEventAccess, createAssignment);
 // GET /api/events/:id/assignments - List assignments (role-based access)

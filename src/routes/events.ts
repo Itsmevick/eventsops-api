@@ -5,6 +5,7 @@ import { requireEventAccess } from "../middleware/requireEventAccess.js";
 import {
   create,
   list,
+  stats,
   getById,
   update,
   publish,
@@ -22,6 +23,9 @@ router.post("/", requireAuth, requireRole("ADMIN", "ORGANIZER"), create);
 
 // GET /api/events - List events (role-based filtering)
 router.get("/", requireAuth, list);
+
+// GET /api/events/stats - Get event statistics (MUST be before /:id route)
+router.get("/stats", requireAuth, stats);
 
 // POST /api/events/:id/assignments - Create assignment (ADMIN/ORGANIZER + event owner)
 router.post("/:id/assignments", requireAuth, requireRole("ADMIN", "ORGANIZER"), requireEventAccess, createAssignment);

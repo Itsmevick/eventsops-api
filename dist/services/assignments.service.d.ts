@@ -18,8 +18,8 @@ export declare function createAssignment(input: CreateAssignmentInput): Promise<
     id: string;
     createdAt: Date;
     eventId: string;
-    roleName: string;
     userId: string;
+    roleName: string;
 }>;
 export declare function listAssignmentsByEvent(eventId: string, userId: string, userRole: Role): Promise<({
     user: {
@@ -31,8 +31,8 @@ export declare function listAssignmentsByEvent(eventId: string, userId: string, 
     id: string;
     createdAt: Date;
     eventId: string;
-    roleName: string;
     userId: string;
+    roleName: string;
 })[]>;
 export declare function deleteAssignment(assignmentId: string, userId: string, userRole: Role): Promise<void>;
 //# sourceMappingURL=assignments.service.d.ts.map

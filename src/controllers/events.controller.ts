@@ -7,6 +7,7 @@ import {
   updateEvent,
   publishEvent,
   archiveEvent,
+  getEventStats,
   getEventMetrics,
 } from "../services/events.service.js";
 import type { EventStatus } from "../types/prisma-enums.js";
@@ -87,6 +88,20 @@ export async function list(req: Request, res: Response) {
     return res.json({ data: events });
   } catch (err: any) {
     console.error("[EVENTS] List error", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+export async function stats(req: Request, res: Response) {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const stats = await getEventStats(req.user.id, req.user.role);
+    return res.json({ data: stats });
+  } catch (err: any) {
+    console.error("[EVENTS] Stats error", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

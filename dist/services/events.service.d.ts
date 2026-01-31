@@ -154,10 +154,15 @@ export declare function archiveEvent(eventId: string): Promise<{
     status: import("@prisma/client").$Enums.EventStatus;
     organizerId: string;
 }>;
+export declare function getEventStats(userId: string, userRole: Role): Promise<{
+    total: number;
+    published: number;
+    upcoming: number;
+}>;
 export declare function getEventMetrics(eventId: string): Promise<{
-    eventId: string;
-    capacity: number;
+    totalAssignments: number;
     totalCheckIns: number;
-    attendanceRate: number | null;
+    assignmentsByRole: Record<string, number>;
+    checkInsToday: number;
 }>;
 //# sourceMappingURL=events.service.d.ts.map
